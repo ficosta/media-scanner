@@ -334,6 +334,38 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@helper/app@workspace:packages/app":
+  version: 0.0.0-use.local
+  resolution: "@helper/app@workspace:packages/app"
+  dependencies:
+    "@helper/media-scanner": "npm:*"
+  languageName: unknown
+  linkType: soft
+
+"@helper/media-scanner@npm:*, @helper/media-scanner@workspace:packages/media-scanner":
+  version: 0.0.0-use.local
+  resolution: "@helper/media-scanner@workspace:packages/media-scanner"
+  languageName: unknown
+  linkType: soft
+
+"@helper/ograf-renderer@workspace:packages/ograf-renderer":
+  version: 0.0.0-use.local
+  resolution: "@helper/ograf-renderer@workspace:packages/ograf-renderer"
+  languageName: unknown
+  linkType: soft
+
+"@helper/ograf-server@workspace:packages/ograf-server":
+  version: 0.0.0-use.local
+  resolution: "@helper/ograf-server@workspace:packages/ograf-server"
+  languageName: unknown
+  linkType: soft
+
+"@helper/shared@workspace:packages/shared":
+  version: 0.0.0-use.local
+  resolution: "@helper/shared@workspace:packages/shared"
+  languageName: unknown
+  linkType: soft
+
 "@humanfs/core@npm:^0.19.1":
   version: 0.19.1
   resolution: "@humanfs/core@npm:0.19.1"

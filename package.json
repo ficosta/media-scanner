@@ -5,7 +5,6 @@
 	"description": "",
 	"license": "LGPL-3.0",
 	"type": "module",
-	"main": "dist/index.js",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/CasparCG/media-scanner.git"
@@ -13,12 +12,14 @@
 	"homepage": "https://github.com/CasparCG/media-scanner",
 	"scripts": {
 		"postinstall": "husky",
-		"dev": "tsx --watch ./src/index.ts",
-		"build": "node tools/build.mjs",
-		"build-linux-arm64": "run build linux arm64",
-		"build-linux-x64": "run build linux x64",
-		"build-win32-x64": "run build win32 x64",
-		"build:docker": "docker build .",
+		"dev": "yarn workspaces foreach --all -pi -j unlimited run dev",
+		"build": "yarn workspaces foreach --all -ti run build",
+		"start": "yarn workspace @helper/app start",
+		"compile": "node tools/build.mjs",
+		"compile-linux-arm64": "run compile linux arm64",
+		"compile-linux-x64": "run compile linux x64",
+		"compile-win32-x64": "run compile win32 x64",
+		"compile:docker": "docker build .",
 		"lint:raw": "run eslint --ext .ts --ext .js --ext .tsx --ext .jsx --ext .mts --ext .mjs --ignore-pattern dist",
 		"lint": "run check-types && run lint:raw .",
 		"lint-fix": "run lint --fix",
@@ -77,5 +78,8 @@
 		"*.{ts,tsx,js,jsx,mts,mjs}": [
 			"yarn lint:raw --fix"
 		]
-	}
+	},
+	"workspaces": [
+		"packages/*"
+	]
 }

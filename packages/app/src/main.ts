@@ -5,25 +5,19 @@
 // import app from '../media-scanner/app.js'
 // import { MediaDatabase, MediaDocument } from '../media-scanner/types/db.js'
 
-import { MediaScanner } from '@helper/media-scanner'
+import { MediaScanner, MediaScannerAPI } from '@helper/media-scanner'
+import { initializeLogger } from './logger.js'
+import { HTTPServer } from './http-server.js'
+import { getConfig } from './config.js'
 
-// const logger = pino(
-// 	Object.assign({}, config.logger, {
-// 		serializers: {
-// 			err: pino.stdSerializers.err,
-// 		},
-// 	})
-// )
+const config = getConfig()
+const logger = initializeLogger(config)
 
-// const db: MediaDatabase = new PouchDB<MediaDocument>(`_media`)
+const mediaScanner = new MediaScanner(logger, config)
+const mediaScannerApi = new MediaScannerAPI(config, mediaScanner.db)
+const httpServer = new HTTPServer(config, logger, mediaScannerApi)
 
-// logger.info(config)
+console.log('Running')
+console.log('Media scanner API running on http://localhost:' + httpServer.port)
 
-// scanner(logger, db, config)
-// app(logger, db, config).listen(config.http.port, config.http.host)
-
-console.log('Hello World!')
-
-const scanner = new MediaScanner()
-
-console.log(scanner)
+// console.log(httpServer)

@@ -12,15 +12,6 @@
     "paths": {
       "*": [
         "./node_modules/*"
-      ],
-      "@helper/app": [
-        "./src/main.ts"
-      ],
-      "@helper/media-scanner": [
-        "../media-scanner/src/main.ts"
-      ],
-      "@helper/shared": [
-        "../shared/src/main.ts"
       ]
     },
     "types": [

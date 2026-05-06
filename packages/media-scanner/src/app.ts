@@ -1,8 +1,6 @@
-import express from 'express'
-import { pinoHttp } from 'pino-http'
-import cors from 'cors'
+/*
 import recursiveReadDir from 'recursive-readdir'
-import { Logger } from 'pino'
+
 import { getId, getGDDScriptElement, extractGDDJSON } from './util.js'
 import { MediaDatabase } from './types/db.js'
 
@@ -10,11 +8,8 @@ const wrap = (fn: express.Handler) => (req: express.Request, res: express.Respon
 	void Promise.resolve(fn(req, res, next)).catch(next)
 }
 
-export default function (logger: Logger, db: MediaDatabase, config: Record<string, any>): express.Application {
-	const app = express()
+export function (logger: Logger, db: MediaDatabase, config: Record<string, any>): express.Application {
 
-	app.use(pinoHttp({ logger }))
-	app.use(cors())
 
 	app.get(
 		'/media',
@@ -249,3 +244,5 @@ export default function (logger: Logger, db: MediaDatabase, config: Record<strin
 
 	return app
 }
+
+*/

@@ -8,5 +8,8 @@
 	"scripts": {
 		"build": "tsc",
 		"dev": "npx tsx watch src/main.ts --devMode"
+	},
+	"dependencies": {
+		"@helper/shared": "*"
 	}
 }

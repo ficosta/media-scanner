@@ -20,6 +20,8 @@ import {
 import path from 'path'
 import fs from 'fs/promises'
 
+// console.log('process.pkg.defaultEntrypoint', process.pkg?.defaultEntrypoint)
+
 export class OgrafServer {
 	private rendererManager: RendererManager
 	private graphicsStore: GraphicsStore
@@ -643,7 +645,16 @@ export class OgrafServer {
 			if (!subPath || subPath === '' || subPath === '/') subPath = '/index.html'
 			subPath = subPath.replace(/^\/+/, '') // remove leading slashes
 
-			await serveFromPath(res, path.resolve('../ograf-renderer/dist'), subPath)
+			// see https://www.npmjs.com/package/pkg#snapshot-filesystem
+			const pkgDefaultEntrypoint = (process as any).pkg?.defaultEntrypoint
+
+			const rendererDistPath = pkgDefaultEntrypoint
+				? // Is running as a pkg executable:
+					path.join(path.dirname(pkgDefaultEntrypoint), 'assets/renderer')
+				: // Is running in dev/unpackaged-mode
+					path.resolve('../ograf-renderer/dist')
+
+			await serveFromPath(res, rendererDistPath, subPath)
 		})
 		// Serve graphics on path /graphic/id/subPath
 		app.get(/\/graphic\/([^/]+)\/(.*)/, async (ctx, res) => {

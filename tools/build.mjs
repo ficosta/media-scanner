@@ -10,7 +10,7 @@ const arch = process.argv[3] || process.arch
 
 console.log(`Building for ${platform}-${arch}`)
 
-await rimraf('deploy')
+// await rimraf('deploy')
 await fs.mkdir('deploy', { recursive: true })
 
 console.log('Building with esbuild...')
@@ -28,6 +28,12 @@ await build({
 console.log('Copying leveldown prebuilds...')
 await fs.mkdir(`deploy/prebuilds`, { recursive: true })
 await fs.cp(`./node_modules/leveldown/prebuilds/${platform}-${arch}`, `deploy/prebuilds/${platform}-${arch}`, {
+	recursive: true,
+})
+// Copy assets
+console.log('Copying assets...')
+// Copy renderer
+await fs.cp(`./packages/ograf-renderer/dist`, `deploy/assets/renderer`, {
 	recursive: true,
 })
 
@@ -54,13 +60,14 @@ if (!unpacked) {
 				helper: './helper.js',
 			},
 			pkg: {
-				assets: 'prebuilds/**/*',
+				assets: ['prebuilds/**/*', 'assets/**/*'],
 			},
 		})
 	)
-
+	// process.exit(0)
 	// Run pkg
 	const filename = `${packageName}-v${version}-${platform}-${arch}${platform === 'win32' ? '.exe' : ''}`
+	await rimraf(`deploy/${filename}`)
 	try {
 		cp.execSync(`pkg -t node24-${platform} . -o ${filename}`, { cwd: './deploy' })
 	} catch (error) {
@@ -69,13 +76,15 @@ if (!unpacked) {
 		process.exit(1)
 	}
 
-	await rimraf(['deploy/package.json', 'deploy/helper.js', 'deploy/prebuilds'])
+	await rimraf(['deploy/package.json', 'deploy/helper.js', 'deploy/prebuilds', 'deploy/assets'])
 }
 
 // Archive the deploy folder — tar.gz on Linux, zip everywhere else
 const archiveSuffix = unpacked ? '-unpacked' : ''
 const archiveExt = platform === 'linux' ? '.tar.gz' : '.zip'
 const archiveFileName = `${packageName}-v${version}${archiveSuffix}-${platform}-${arch}${archiveExt}`
+
+await rimraf(`./${archiveFileName}`)
 
 if (platform === 'linux') {
 	await tar('./deploy', `./${archiveFileName}`)

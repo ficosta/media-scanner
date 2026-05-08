@@ -11,29 +11,35 @@ export class GraphicCache {
 		elementName: string
 		graphicInfo: GraphicInfo
 	}> {
+		const elementName = this.getElementName(graphicId)
 		// Check if the Graphic is already registered:
-		const cachedGraphic = customElements.get(graphicId)
+		const cachedGraphic = customElements.get(elementName)
 		const cachedGraphicInfo = this.cachedGraphicInfo[graphicId]
-		if (cachedGraphic && cachedGraphicInfo) return { elementName: graphicId, graphicInfo: cachedGraphicInfo }
+		if (cachedGraphic && cachedGraphicInfo) return { elementName, graphicInfo: cachedGraphicInfo }
 
 		console.log(`Loading Graphic "${graphicId}"`)
 
-		console.log(`Loading manifest...`)
+		// console.log(`Loading manifest...`)
 		const graphicInfo = await this.fetchGraphicInfo(graphicId)
 
 		this.cachedGraphicInfo[graphicId] = graphicInfo
 
 		// Load the Graphic:
-		console.log(`Loading Graphic...`, graphicInfo)
+		// console.log(`Loading Graphic...`, graphicInfo)
 		const webComponent = await this.fetchModule(graphicId, graphicInfo.graphic)
 
 		// register the web component
-		customElements.define(graphicId, webComponent)
+		// console.log('Define element', graphicId, webComponent)
+		customElements.define(elementName, webComponent)
 
 		return {
-			elementName: graphicId,
+			elementName,
 			graphicInfo,
 		}
+	}
+	getElementName(graphicId: string): string {
+		// https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define#valid_custom_element_names
+		return 'graphic-' + graphicId.toLowerCase().replace(/[^a-z0-9]+/g, '-')
 	}
 	private async fetchGraphicInfo(graphicId: string): Promise<GraphicInfo> {
 		const url = `${this.serverApiUrl}/ograf/v1/graphics/${graphicId}`
@@ -54,7 +60,8 @@ export class GraphicCache {
 		id: string,
 		manifest: ServerApi.components['schemas']['schema-2']
 	): Promise<CustomElementConstructor> {
-		const modulePath = `${this.serverApiUrl}/serverApi/internal/graphics/${id}/${manifest.main ?? 'graphic.mjs'}`
+		// console.log('this.serverApiUrl', this.serverApiUrl)
+		const modulePath = `${this.serverApiUrl}/graphic/${id}/${manifest.main ?? 'graphic.mjs'}`
 
 		// Load the Graphic module:
 		const module = await import(modulePath)

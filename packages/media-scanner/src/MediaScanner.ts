@@ -19,7 +19,10 @@ export class MediaScanner {
 		private config: Config
 	) {
 		this.db = new PouchDB<MediaDocument>(`_media`)
-		this.initialize()
+
+		if (config.enable.scanning) {
+			this.initialize()
+		}
 	}
 
 	private initialize() {

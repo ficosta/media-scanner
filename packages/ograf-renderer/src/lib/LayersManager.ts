@@ -1,17 +1,24 @@
 import * as OGraf from 'ograf'
 import { GraphicCache } from './GraphicsCache.js'
 import { LayerHandler } from './LayerHandler.js'
+import { renderLayers } from '@helper/shared'
 
 export class LayersManager {
 	private layers: Record<string, LayerHandler> = {}
 	constructor(private graphicCache: GraphicCache) {
-		// Create 10 layers
-		for (let i = 0; i < 5; i++) {
+		// Create the layers:
+		for (const layerId of renderLayers) {
 			const renderTarget: RenderTarget = {
-				layerId: `layer-${i}`,
+				layerId: layerId,
 			}
 
-			this.layers[renderTarget.layerId] = new LayerHandler(this, this.graphicCache, renderTarget, `Layer ${i}`, i)
+			this.layers[`${renderTarget.layerId}`] = new LayerHandler(
+				this,
+				this.graphicCache,
+				renderTarget,
+				`Layer ${layerId}`,
+				layerId
+			)
 		}
 
 		// setup frameRate tracker:
@@ -25,7 +32,13 @@ export class LayersManager {
 	}
 
 	getLayer(renderTarget: RenderTarget): LayerHandler | undefined {
-		return this.layers[renderTarget.layerId]
+		if (typeof renderTarget === 'string') {
+			renderTarget = JSON.parse(renderTarget) as RenderTarget
+		}
+
+		const layer = this.layers[`${renderTarget.layerId}`]
+
+		return layer
 	}
 	getAllLayers(): LayerHandler[] {
 		return Object.values<LayerHandler>(this.layers)
@@ -84,5 +97,5 @@ export class LayersManager {
 }
 
 export interface RenderTarget {
-	layerId: string
+	layerId: number
 }

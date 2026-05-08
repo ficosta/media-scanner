@@ -26,5 +26,5 @@ FROM node:26
 
   COPY --from=builder /usr/src/app/deploy /usr/src/app
 
-  ENTRYPOINT [ "node", "scanner.js" ]
+  ENTRYPOINT [ "node", "helper.js" ]
   HEALTHCHECK CMD curl -f http://localhost:8000/healthcheck || exit 1

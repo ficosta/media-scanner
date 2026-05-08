@@ -4,26 +4,31 @@
     "src/**/*.ts"
   ],
   "exclude": [
-    "node_modules/**",
-    "src/**/*spec.ts",
-    "src/**/__tests__/*",
-    "src/**/__mocks__/*"
+    "node_modules/**"
   ],
   "compilerOptions": {
     "outDir": "./dist",
-    "baseUrl": "./",
+    "rootDir": "./src",
     "paths": {
       "*": [
         "./node_modules/*"
       ],
-      "@ograf-server/server": [
-        "./src/index.ts"
+      "@helper/shared": [
+        "../shared/src/main.ts"
       ]
     },
-    "types": [],
+    "types": [
+      "node"
+    ],
     "lib": [
       "ES2024"
     ],
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "composite": true
+  },
+  "references": [
+    {
+      "path": "../shared/tsconfig.json"
+    }
+  ]
 }

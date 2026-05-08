@@ -1,19 +1,11 @@
-export function getDefaultServerUrl(baseName = 'api'): string {
-	{
-		// Using namespace mode
-		const namespaceId = getNameSpaceId()
-		if (namespaceId) return `${window.location.origin}/${baseName}/${namespaceId}`
-	}
-	{
-		// Using non-namespace mode
-		const m = window.location.pathname.match(/^\/renderer\/default/)
-		if (m && m.groups) {
-			return `${window.location.origin}/${baseName}`
-		}
+export function getDefaultServerUrl(): string {
+	const m = window.location.pathname.match(/^\/renderer/)
+	if (m && m.groups) {
+		return `${window.location.origin}`
 	}
 
 	// In development-mode
-	return `http://localhost:8080/${baseName}`
+	return `http://localhost:8000`
 }
 
 export function getNameSpaceId(): string {

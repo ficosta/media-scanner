@@ -1,3 +1,4 @@
+/*
 import Router from '@koa/router'
 import { ParameterizedContext, DefaultState, DefaultContext } from 'koa'
 import * as InternalServerAPI from '../types/internalServerAPI.js'
@@ -14,3 +15,4 @@ export type CTX = ParameterizedContext<
 		},
 	InternalServerAPI.AnyReturnValue
 >
+*/

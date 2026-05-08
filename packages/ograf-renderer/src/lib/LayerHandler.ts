@@ -2,7 +2,7 @@ import * as OGraf from 'ograf'
 import { GraphicInstance } from './GraphicInstance.js'
 import { GraphicCache } from './GraphicsCache.js'
 import { LayersManager, RenderTarget } from './LayersManager.js'
-import { GraphicInstanceError, RenderTargetInfo } from '@ograf-server/shared'
+import { GraphicInstanceError, RenderTargetInfo } from '@helper/shared'
 
 export class LayerHandler {
 	public graphicInstance: GraphicInstance | null = null
@@ -86,8 +86,9 @@ export class LayerHandler {
 	}
 	async clearGraphic(): Promise<void> {
 		const existing = this.getGraphicInstance()
-		console.log('Clearing GraphicInstance', existing)
+
 		if (existing) {
+			console.log('Clearing GraphicInstance', existing.id)
 			try {
 				await existing.element.dispose({})
 			} catch (err) {

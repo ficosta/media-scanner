@@ -30,7 +30,7 @@ export const App: React.FC = () => {
 
 		/** URL to send server requests to: */
 		const serverApiUrl = getDefaultServerUrl() // 'http://localhost:8080'
-		console.log('Using serverApiUrl:', serverApiUrl)
+		// console.log('Using serverApiUrl:', serverApiUrl)
 		/** URL to open websocket connection to */
 		// const rendererApiUrl = 'ws://localhost:8080/rendererApi/v1'
 		const rendererApiUrl = serverApiUrl.replace(/^http/, 'ws') // 'ws://localhost:8080'

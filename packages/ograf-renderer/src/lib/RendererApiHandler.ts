@@ -7,7 +7,8 @@ import {
 	GraphicInstanceOnTarget,
 	GraphicInstanceError,
 	ErrorReturnValue,
-} from '@ograf-server/shared'
+	renderTargetSchema,
+} from '@helper/shared'
 
 export class RendererApiHandler implements MethodsOnRenderer {
 	// this.layersManager = layersManager
@@ -34,26 +35,6 @@ export class RendererApiHandler implements MethodsOnRenderer {
 			rendererName: string
 		}
 	) {
-		// this.actions['shake-it'] = async (params: any) => {
-		// 	const el: HTMLDivElement | null = document.querySelector('#main-container')
-
-		// 	if (!el) return
-
-		// 	const endTime = Date.now() + (params.duration || 0)
-
-		// 	const shakeIt = () => {
-		// 		if (Date.now() < endTime) {
-		// 			el.style.transform = `rotate3d(${Math.random()}, ${Math.random()}, ${Math.random()}, ${Math.random() * 5}deg)`
-
-		// 			setTimeout(() => {
-		// 				shakeIt()
-		// 			}, 1000 / 30)
-		// 		} else {
-		// 			el.style.transform = ''
-		// 		}
-		// 	}
-		// 	shakeIt()
-		// }
 		this.actions['reload-page'] = async () => {
 			// Put in a timeout to allow the reply to be sent before the page is reloaded:
 			setTimeout(() => {
@@ -241,26 +222,6 @@ export class RendererApiHandler implements MethodsOnRenderer {
 		}
 	}
 
-	// async getManifest(): Promise<{ rendererManifest: RendererInfo & RendererManifest }> {
-	// 	// JSON RPC Method
-	// 	return {
-	// 		rendererManifest: {
-	// 			id: this.rendererId,
-	// 			name: this.info.rendererName,
-	// 			description: 'A basic browser-based, layered Renderer',
-	// 			actions: {},
-
-	// 			status: {
-	// 				status: 'OK',
-	// 				// message?: string;
-
-	// 				renderTargets: this.layersManager.getAllLayers().map((layer) => {
-	// 					return layer.getInfo()
-	// 				}),
-	// 			},
-	// 		} satisfies RendererInfo,
-	// 	}
-	// }
 	async getInfo(): Promise<{ rendererInfo: RendererInfo }> {
 		return this._getInfo()
 	}
@@ -277,21 +238,6 @@ export class RendererApiHandler implements MethodsOnRenderer {
 				//   // description: `Layer ${layer.id}`
 				// })),
 				customActions: [
-					// {
-					// 	id: 'shake-it',
-					// 	name: 'Shake it up!',
-					// 	description: 'This is just an example renderer-action that shakes the entire renderer.',
-					// 	schema: {
-					// 		type: 'object',
-					// 		properties: {
-					// 			duration: {
-					// 				type: 'number',
-					// 				title: 'Duration (ms)',
-					// 				default: 2000,
-					// 			},
-					// 		},
-					// 	} as any,
-					// },
 					{
 						id: 'reload-page',
 						name: 'Reload page',
@@ -299,28 +245,7 @@ export class RendererApiHandler implements MethodsOnRenderer {
 						schema: {} as any,
 					},
 				],
-				renderTargetSchema: {
-					type: 'object',
-					properties: {
-						layerId: {
-							/**
-							 * This Renderer uses a string to identify its layers:
-							 * Using the GDD Select to define the layer.
-							 * @see https://superflytv.github.io/GraphicsDataDefinition/#select
-							 */
-							type: 'string',
-							title: 'Layer',
-							enum: this.layersManager.getAllLayers().map((layer) => layer.renderTarget.layerId),
-							gddType: 'select',
-							gddOptions: {
-								labels: Object.fromEntries(
-									this.layersManager.getAllLayers().map((layer) => [layer.renderTarget.layerId, layer.name])
-								),
-							},
-						},
-					},
-					default: this.layersManager.getAllLayers()[0].renderTarget,
-				},
+				renderTargetSchema: renderTargetSchema,
 				// renderCharacteristics?: components["schemas"]["RenderCharacteristics"];
 				status: {
 					status: 'OK', // OK, WARNING, ERROR

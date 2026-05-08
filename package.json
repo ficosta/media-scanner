@@ -13,7 +13,7 @@
 	"scripts": {
 		"postinstall": "husky",
 		"dev": "yarn workspaces foreach --all -pi -j unlimited run dev",
-		"build": "yarn workspaces foreach --all -ti run build",
+		"build": "tsc --build tsconfig.json && yarn workspaces foreach --all run build",
 		"start": "yarn workspace @helper/app start",
 		"compile": "node tools/build.mjs",
 		"compile-linux-arm64": "run compile linux arm64",
@@ -38,6 +38,9 @@
 		"chokidar": "^3.6.0",
 		"cors": "^2.8.5",
 		"express": "^5.2.1",
+		"express-ws": "^5.0.2",
+		"json-rpc-2.0": "^1.7.1",
+		"mime-types": "^3.0.2",
 		"moment": "^2.30.1",
 		"nconf": "^0.13.0",
 		"pino": "^10.1.0",
@@ -45,12 +48,15 @@
 		"pouchdb-node": "^7.3.1",
 		"recursive-readdir": "^2.2.3",
 		"rxjs": "^7.8.2",
-		"xml2js": "^0.6.2"
+		"xml2js": "^0.6.2",
+		"zod": "^4.4.3"
 	},
 	"devDependencies": {
 		"@sofie-automation/code-standard-preset": "3.2.0",
 		"@types/cors": "^2.8.19",
 		"@types/express": "^5.0.6",
+		"@types/express-ws": "^3.0.6",
+		"@types/mime-types": "^3.0.1",
 		"@types/nconf": "^0.10.7",
 		"@types/node": "^24.10.4",
 		"@types/pouchdb-node": "^6.1.7",

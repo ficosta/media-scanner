@@ -1,6 +1,7 @@
 import recursiveReadDir from 'recursive-readdir'
+import type { Express, Handler, Request, Response, NextFunction } from 'express'
 
-import { Config } from '@helper/shared'
+import type { Config } from '@helper/shared'
 import { MediaDatabase } from './types/db.js'
 import { extractGDDJSON, getGDDScriptElement, getId } from './util.js'
 
@@ -8,8 +9,118 @@ export class MediaScannerAPI {
 	constructor(
 		private config: Config,
 		private db: MediaDatabase
-	) {
-		console.log('Hello World media scanner!!')
+	) {}
+	setupMediaScannerRoutes(app: Express) {
+		app.get(
+			'/media',
+			this.wrap(async (_req, res) => {
+				res.set('content-type', 'application/json')
+				res.send(await this.getMedia())
+			})
+		)
+
+		app.get(
+			'/media/info/:id',
+			this.wrap(async (req, res) => {
+				res.set('content-type', 'application/json')
+				res.send(await this.getMediaInfo(req.params.id))
+			})
+		)
+
+		app.get(
+			'/media/thumbnail/:id',
+			this.wrap(async (req, res) => {
+				const data = await this.getMediaThumbnail(req.params.id)
+				if (!data) {
+					res.status(404).end()
+					return
+				}
+				res.set('content-type', 'image/png')
+				res.send(data)
+			})
+		)
+
+		app.get(
+			'/cls',
+			this.wrap(async (_req, res) => {
+				res.set('content-type', 'text/plain')
+				res.send(await this.getCls())
+			})
+		)
+
+		app.get(
+			'/tls',
+			this.wrap(async (_req, res) => {
+				res.set('content-type', 'text/plain')
+				res.send(await this.getTls())
+			})
+		)
+
+		app.get(
+			'/templates',
+			this.wrap(async (_req, res) => {
+				res.set('content-type', 'application/json')
+				res.send(await this.getTemplates())
+			})
+		)
+
+		app.get(
+			'/fls',
+			this.wrap(async (_req, res) => {
+				res.set('content-type', 'text/plain')
+				res.send(await this.getFls())
+			})
+		)
+
+		app.get(
+			'/cinf/:id',
+			this.wrap(async (req, res) => {
+				res.set('content-type', 'text/plain')
+				res.send(await this.getCinf(req.params.id))
+			})
+		)
+
+		app.get(
+			'/thumbnail/generate',
+			this.wrap(async (_req, res) => {
+				res.set('content-type', 'text/plain')
+				res.send(await this.generateThumbnailAll())
+			})
+		)
+
+		app.get(
+			'/thumbnail/generate/:id',
+			this.wrap(async (req, res) => {
+				res.set('content-type', 'text/plain')
+				res.send(await this.generateThumbnail(req.params.id))
+			})
+		)
+
+		app.get(
+			'/thumbnail',
+			this.wrap(async (_req, res) => {
+				res.set('content-type', 'text/plain')
+				res.send(await this.getThumbnailList())
+			})
+		)
+
+		app.get(
+			'/thumbnail/:id',
+			this.wrap(async (req, res) => {
+				const data = await this.getThumbnail(req.params.id)
+				if (!data) {
+					res.status(404).end()
+					return
+				}
+				res.set('content-type', 'text/plain')
+				res.send(data)
+			})
+		)
+	}
+	private wrap(fn: Handler) {
+		return async (req: Request, res: Response, next: NextFunction) => {
+			await Promise.resolve(fn(req, res, next)).catch(next)
+		}
 	}
 
 	async getMedia() {

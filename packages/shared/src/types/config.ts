@@ -1,6 +1,9 @@
 export interface Config {
 	caspar: {
 		config: string
+		channelCount: number
+		host: string
+		port: number
 	}
 	paths: {
 		template: string
@@ -12,6 +15,9 @@ export interface Config {
 	scanner: {
 		paths: string
 		// Note: See https://www.npmjs.com/package/chokidar#api.
+
+		host: string
+		port: number
 	}
 	thumbnails: {
 		width: 256
@@ -30,5 +36,12 @@ export interface Config {
 	http: {
 		port: number
 		host: string | undefined
+	}
+	enable: {
+		scanning: boolean
+		ograf: boolean
+	}
+	ograf: {
+		rendererLayers: number[]
 	}
 }

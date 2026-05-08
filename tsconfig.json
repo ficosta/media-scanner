@@ -1,0 +1,17 @@
+{
+	"files": [],
+	"references": [
+		{
+			"path": "./packages/app/tsconfig.json"
+		},
+		{
+			"path": "./packages/media-scanner/tsconfig.json"
+		},
+		{
+			"path": "./packages/ograf-server/tsconfig.json"
+		},
+		{
+			"path": "./packages/shared/tsconfig.json"
+		},
+	]
+}

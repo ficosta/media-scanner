@@ -47,7 +47,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - windows-latest
+          # Windows disabled: GitHub-hosted Windows minutes are billed 2x. Uncomment to re-enable.
+          # - windows-latest
           - ubuntu-latest
           - ubuntu-24.04-arm
 
@@ -78,7 +79,8 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - windows-latest
+          # Windows disabled: GitHub-hosted Windows minutes are billed 2x. Uncomment to re-enable.
+          # - windows-latest
           - ubuntu-latest
           - ubuntu-24.04-arm
 
